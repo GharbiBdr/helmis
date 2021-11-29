@@ -1,0 +1,27 @@
+name: deploy-preprod
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  helm:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: azure/k8s-bake@v1
+          with:
+            renderEngine: 'helm'
+            helmChart: './helm/'
+            overrides: |
+              image.tag:${{ github.sha }}
+              image.repo:frchallenges-backend-stage
+              project:frc
+              app:back
+              containerport:1337
+              host:pre.api.france-challenges.com
+              environment:staging
+            helm-version: 'latest'
+          id: bake
+        - uses: actions/upload-artifact@main
+          with:
+            name: helm_artifact
+            path: ${{ steps.bake.outputs.manifestsBundle }}
