@@ -9,7 +9,9 @@ jobs:
         image: ubuntu:20.04
         options: --user 1010
       steps:
-        - run: curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+        - run: apt update && apt upgrade -y
+        - run : apt istall curl -y
+        - run: curl https://baltocdn.com/helm/signing.asc | apt-key add -
         - uses: actions/checkout@v2
         - uses: azure/k8s-bake@v1
           with:
