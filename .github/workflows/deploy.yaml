@@ -5,7 +5,11 @@ on:
 jobs:
   helm:
       runs-on: ubuntu-latest
+      container:
+        image: ubuntu:20.04
+        options: --user 1010
       steps:
+        - run: sudo snap install helm --classic
         - uses: actions/checkout@v2
         - uses: azure/k8s-bake@v1
           with:
